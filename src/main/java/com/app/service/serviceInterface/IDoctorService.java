@@ -6,16 +6,14 @@ import java.util.List;
 import com.app.entity.dto.DoctorDto;
 import com.app.entity.dto.LoginRequest;
 import com.app.entity.dto.LoginResponse;
+import com.app.entity.dto.UserDto;
 import com.app.entity.modal.Doctor;
 import com.app.entity.modal.DoctorTimeTable;
 
-public interface DoctorServiceIntf {
+public interface IDoctorService {
 	//register new doctor
-	Doctor saveDoctor(DoctorDto doctor);
+	Doctor saveDoctor(UserDto doctor);
 	
-	//authenticate doctor
-	LoginResponse authenticateDoctor(LoginRequest request);
-
 	//get list of specializations by city
 	List<String> getSpecializationsByCity(String city);
 	
@@ -29,8 +27,9 @@ public interface DoctorServiceIntf {
 	List<Doctor>getAllDoctors();
 	
 	//delete doctor by id
-	String deleteDoctorById(Long doctorId);
+//	String deleteDoctorById(Long doctorId);
 
+	Doctor getDoctorDetails(Long id);
 	
 	//Make available slots table for doctor from start date to end date
 	List<LocalDateTime> createAvailableSlotsDetails(Long doctorId, DoctorTimeTable doctorTimeTable);

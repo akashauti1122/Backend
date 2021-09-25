@@ -15,85 +15,84 @@ import javax.transaction.Transactional;
 
 import com.app.entity.dto.DoctorDto;
 import com.app.entity.dto.LoginRequest;
-import com.app.service.serviceInterface.DoctorServiceIntf;
+import com.app.entity.dto.UserDto;
+import com.app.entity.modal.*;
+import com.app.repository.UserRepository;
+import com.app.service.serviceInterface.IDoctorService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.app.entity.dto.LoginResponse;
-import com.app.entity.modal.Appointment;
-import com.app.entity.modal.Doctor;
-import com.app.entity.modal.DoctorTimeTable;
 import com.app.exception.customException.UserHandlingException;
 import com.app.repository.AppointmentRepository;
 import com.app.repository.DoctorRepository;
 import com.app.repository.DoctorTimeTableRepository;
 
+import static com.app.util.UtilityClass.getNullPropertyNames;
+
 @Service
 @Transactional
-public class DoctorServiceImpl implements DoctorServiceIntf {
+@RequiredArgsConstructor
+public class DoctorServiceImpl implements IDoctorService {
+	private	final PasswordEncoder passwordEncoder;
+	private	final DoctorRepository doctorRepo;
+	private	final UserRepository userRepository;
+	private	final AppointmentRepository appointmentRepo;
+	private	final DoctorTimeTableRepository doctorTimeTableRepo;
 
-	@Autowired
-	PasswordEncoder passwordEncoder;
-
-	@Autowired
-	DoctorRepository doctorRepo;
-	
-	@Autowired
-	AppointmentRepository appointmentRepo;
-	
-	@Autowired
-	DoctorTimeTableRepository doctorTimeTableRepo;
-	
-//	@Override
-//	public Doctor saveDoctor(Doctor doctor) {
-//		return doctorRepo.save(doctor);
-//	}
-
-	//BeanUtils -> properties copy (Source (properties) = > target(properties))
 	@Override
-	public Doctor saveDoctor(DoctorDto dto) {
-		Doctor newDoctor = Doctor.createDoctor(dto);
-		newDoctor.setPassword(passwordEncoder.encode(newDoctor.getPassword()));
-		System.out.println("new Doctor Object: " + newDoctor);
-		return doctorRepo.save(newDoctor);
+	public Doctor saveDoctor(UserDto dto) {
+		User newUser = new User();
+		BeanUtils.copyProperties(dto, newUser, getNullPropertyNames(dto));
+		Doctor newDoctor = new Doctor();
+		BeanUtils.copyProperties(dto, newDoctor, getNullPropertyNames(dto));
+		newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
+		newUser.setUserType(UserType.DOCTOR);
+		newUser = userRepository.save(newUser);
+		if(null != newUser) {
+			newDoctor.setDoctorId(newUser.getId());
+			return doctorRepo.save(newDoctor);
+		}
+		throw new RuntimeException("Something went wrong!!!, Doctor cannot be registered.");
 	}
 	
 	@Override
 	public List<String> getSpecializationsByCity(String city){
-		return doctorRepo.getSpecializationsByCity(city);	//get all unique specialization list of doctors
+		return doctorRepo.getSpecializationsByCity(city);
 	}
 
 	@Override
 	public List<Doctor> getAllDoctorsBySpecializationAndCity(String specialization, String city) {
-		List<Doctor> doctors = doctorRepo.findAllBySpecializationAndCity(specialization, city);
-		return doctors;
+		return doctorRepo.findAllBySpecializationAndCity(specialization, city);
 	}
 	
-	@Override
-	public LoginResponse authenticateDoctor(LoginRequest request) {
-		Doctor doctor = doctorRepo.findByEmail(request.getEmail())
-				.orElseThrow(() -> new RuntimeException("User with email: " + request.getEmail() + " doesn't exist."));
-
-		// Hash login password and compare with hash that is stored in database
-		// Hashing -> 1 way technique (plain text ---> hash )
-		// hash --X-->   plain text
-		if(passwordEncoder.matches(request.getPassword(), doctor.getPassword())) {
-			return new LoginResponse(doctor.getId(), doctor.getFirstName(), "doctor");
-		}
-		throw new RuntimeException("Invalid password!!!");
-	}
+//	@Override
+//	public LoginResponse authenticateDoctor(LoginRequest request) {
+//		Doctor doctor = doctorRepo.findByEmail(request.getEmail())
+//				.orElseThrow(() -> new RuntimeException("User with email: " + request.getEmail() + " doesn't exist."));
+//
+//		// Hash login password and compare with hash that is stored in database
+//		// Hashing -> 1 way technique (plain text ---> hash )
+//		// hash --X-->   plain text
+//		if(passwordEncoder.matches(request.getPassword(), doctor.getPassword())) {
+//			return new LoginResponse(doctor.getId(), doctor.getFirstName(), "doctor");
+//		}
+//		throw new RuntimeException("Invalid password!!!");
+//	}
 
 	@Override
 	public List<Doctor> getAllDoctors() {
 		return doctorRepo.findAll();
 	}
 
-	@Override
-	public String deleteDoctorById(Long doctorId) {
-		doctorRepo.deleteById(doctorId);
-		return "Successfully Deleted doctor with id : "+doctorId;
-	}
+//	@Override
+//	public String deleteDoctorById(Long doctorId) {
+//		doctorRepo.deleteById(doctorId);
+//		return "Successfully Deleted doctor with id : "+doctorId;
+//	}
 
 	@Override
 	public List<LocalDateTime> createAvailableSlotsDetails(Long doctorId, DoctorTimeTable appointmentSlot) {
@@ -113,11 +112,9 @@ public class DoctorServiceImpl implements DoctorServiceIntf {
 		//int breatDuration = appointmentSlot.getBreakDuration();
 
 		List<String> holidays = new ArrayList<>(appointmentSlot.getHolidays());
-		
-		String str = "";
-		
+
 		for(int i=0;i<holidays.size();i++) {
-			str = holidays.get(i);
+			String str = holidays.get(i);
 			holidays.set(i, str.toUpperCase());
 		}
 
@@ -216,5 +213,10 @@ public class DoctorServiceImpl implements DoctorServiceIntf {
 		//System.out.println("******* slots : "+availableSlots);
 		//System.out.println("!!!!!!!!!!!!!! Slot after updating (true/false) : "+availableSlots.get(time));
 		
+	}
+
+	@Override
+	public Doctor getDoctorDetails(Long id) {
+		return doctorRepo.findById(id).orElseThrow(() -> new RuntimeException("Doctor with id: " + id + " doesn't exist."));
 	}
 }

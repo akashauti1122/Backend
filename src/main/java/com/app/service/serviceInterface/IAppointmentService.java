@@ -4,8 +4,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import com.app.entity.modal.Appointment;
+import com.app.entity.modal.User;
 
-public interface AppointmentServiceIntf {
+public interface IAppointmentService {
 	
 	//cancel appointment
 	String cancelAppointment(Long appointmentId);
@@ -32,6 +33,7 @@ public interface AppointmentServiceIntf {
 	List<LocalDateTime> bookAppointmentForPatient(Long doctorId, Long patientId, LocalDateTime time);
 	
 	//get patient by appointment id
-	Patient getPatientByAppointmentId(Long appointmentId);
-	
+	User getPatientByAppointmentId(Long appointmentId);
+
+//	List<Appointment> getParticularAppointment(long patientId, LocalDateTime dateTime);
 }

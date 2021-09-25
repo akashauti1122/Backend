@@ -17,20 +17,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.app.entity.dto.LoginRequest;
 import com.app.entity.modal.DoctorTimeTable;
-import com.app.service.serviceInterface.DoctorServiceIntf;
+import com.app.service.serviceInterface.IDoctorService;
 
 @RestController
 @RequestMapping("/doctor")
 @CrossOrigin(value = "*", allowedHeaders = "*")
 public class DoctorController {
 	@Autowired
-	DoctorServiceIntf doctorService;
-	
-	@PostMapping("/login")
-	public ResponseEntity<?> authenticateDoctor(@RequestBody @Valid LoginRequest request) {
-		System.out.println("in auth doctor " + request);
-		return new ResponseEntity<>(doctorService.authenticateDoctor(request), HttpStatus.ACCEPTED);
-	}
+	IDoctorService doctorService;
 	
 	@PostMapping("/createAppointmentSlot/{doctor_id}")
 	public List<LocalDateTime> createAppointmentSlots(@RequestBody DoctorTimeTable doctorTimeTable, @PathVariable Long doctor_id){

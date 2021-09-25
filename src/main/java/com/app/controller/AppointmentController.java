@@ -14,18 +14,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.app.entity.modal.Appointment;
-import com.app.service.serviceInterface.AppointmentServiceIntf;
-import com.app.service.serviceInterface.DoctorServiceIntf;
+import com.app.service.serviceInterface.IAppointmentService;
+import com.app.service.serviceInterface.IDoctorService;
 
 @RestController
 @RequestMapping("/appointment")
 @CrossOrigin(value = "*", allowedHeaders = "*")
 public class AppointmentController {
-	private AppointmentServiceIntf appointmentService;
-	private DoctorServiceIntf doctorService;
+	private IAppointmentService appointmentService;
+	private IDoctorService doctorService;
 
 	@Autowired
-	public AppointmentController(AppointmentServiceIntf appointmentService, DoctorServiceIntf doctorService) {
+	public AppointmentController(IAppointmentService appointmentService, IDoctorService doctorService) {
 		this.appointmentService = appointmentService;
 		this.doctorService = doctorService;
 	}

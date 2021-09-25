@@ -4,10 +4,10 @@ import java.util.List;
 
 import com.app.entity.modal.BloodDonor;
 
-public interface BloodDonorIntf {
+public interface IBloodDonorService {
 	
 	//Save new donor
-	BloodDonor saveBloodDonor(BloodDonor donor);
+	BloodDonor saveBloodDonor(com.app.entity.modal.BloodDonor donor);
 	
 	//get list of all donors
 	List<BloodDonor> getAllBloodDonors();
