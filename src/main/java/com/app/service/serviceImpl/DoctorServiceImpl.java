@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
@@ -19,6 +20,7 @@ import com.app.entity.dto.UserDto;
 import com.app.entity.modal.*;
 import com.app.repository.UserRepository;
 import com.app.service.serviceInterface.IDoctorService;
+import com.app.service.serviceInterface.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +41,7 @@ import static com.app.util.UtilityClass.getNullPropertyNames;
 public class DoctorServiceImpl implements IDoctorService {
 	private	final PasswordEncoder passwordEncoder;
 	private	final DoctorRepository doctorRepo;
-	private	final UserRepository userRepository;
+	private	final IUserService userService;
 	private	final AppointmentRepository appointmentRepo;
 	private	final DoctorTimeTableRepository doctorTimeTableRepo;
 
@@ -51,7 +53,7 @@ public class DoctorServiceImpl implements IDoctorService {
 		BeanUtils.copyProperties(dto, newDoctor, getNullPropertyNames(dto));
 		newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
 		newUser.setUserType(UserType.DOCTOR);
-		newUser = userRepository.save(newUser);
+		newUser = userService.persistUser(newUser);
 		if(null != newUser) {
 			newDoctor.setDoctorId(newUser.getId());
 			return doctorRepo.save(newDoctor);
@@ -61,12 +63,21 @@ public class DoctorServiceImpl implements IDoctorService {
 	
 	@Override
 	public List<String> getSpecializationsByCity(String city){
-		return doctorRepo.getSpecializationsByCity(city);
+		return userService.getDoctorsByCity(city)
+				.stream()
+				.map(doctor -> this.getDoctorDetails(doctor.getId()))
+				.map(Doctor::getSpecialization)
+				.distinct().collect(Collectors.toList());
 	}
 
 	@Override
 	public List<Doctor> getAllDoctorsBySpecializationAndCity(String specialization, String city) {
-		return doctorRepo.findAllBySpecializationAndCity(specialization, city);
+		return userService.getDoctorsByCity(city)
+				.stream()
+				.filter(user -> user.getCity().equalsIgnoreCase(city))
+				.map(doctor -> this.getDoctorDetails(doctor.getId()))
+				.filter(doctor -> doctor.getSpecialization().equalsIgnoreCase(specialization))
+				.collect(Collectors.toList());
 	}
 	
 //	@Override

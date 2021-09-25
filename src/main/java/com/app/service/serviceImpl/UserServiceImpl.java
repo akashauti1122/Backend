@@ -24,7 +24,6 @@ import static com.app.util.UtilityClass.getNullPropertyNames;
 @RequiredArgsConstructor
 public class UserServiceImpl implements IUserService {
 	private final UserRepository userRepository;
-	private final DoctorServiceImpl doctorService;
 	private final AppointmentRepository appointmentRepo;
 	
 	@Override
@@ -33,6 +32,11 @@ public class UserServiceImpl implements IUserService {
 		BeanUtils.copyProperties(userDto, newUser, getNullPropertyNames(userDto));
 		newUser.setUserType(UserType.PATIENT);
 		return userRepository.save(newUser);
+	}
+
+	@Override
+	public User persistUser(User user) {
+		return userRepository.save(user);
 	}
 
 //	@Override
@@ -54,6 +58,22 @@ public class UserServiceImpl implements IUserService {
 		return userRepository.findAll()
 				.stream()
 				.filter(user -> user.getUserType().equals(UserType.PATIENT))
+				.collect(Collectors.toList());
+	}
+
+	@Override
+	public List<User> getAllDoctors() {
+		return userRepository.findAll()
+				.stream()
+				.filter(user -> user.getUserType().equals(UserType.DOCTOR))
+				.collect(Collectors.toList());
+	}
+
+	@Override
+	public List<User> getDoctorsByCity(String city) {
+		return userRepository.findAll()
+				.stream()
+				.filter(user -> user.getUserType().equals(UserType.DOCTOR) && user.getCity().equalsIgnoreCase(city))
 				.collect(Collectors.toList());
 	}
 

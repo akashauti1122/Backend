@@ -11,12 +11,4 @@ import com.app.entity.modal.Doctor;
 
 @Repository
 public interface DoctorRepository extends JpaRepository<Doctor, Long> {
-
-	Optional<Doctor> findByEmail(String email);
-
-	@Query("SELECT DISTINCT  d.specialization FROM Doctor d where d.city=?1")
-	List<String> getSpecializationsByCity(String city);
-	
-	List<Doctor> findAllBySpecializationAndCity(String specialization, String city);
-
 }
