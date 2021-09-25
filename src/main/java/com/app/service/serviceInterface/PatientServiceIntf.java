@@ -2,8 +2,6 @@ package com.app.service.serviceInterface;
 
 import java.util.List;
 
-import com.app.entity.modal.Patient;
-
 public interface PatientServiceIntf {
 	
 	//register new patient

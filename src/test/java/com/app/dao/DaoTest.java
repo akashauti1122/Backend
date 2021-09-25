@@ -21,7 +21,6 @@ import com.app.entity.modal.BloodGroup;
 import com.app.entity.modal.Doctor;
 import com.app.entity.modal.DoctorTimeTable;
 import com.app.entity.modal.Gender;
-import com.app.entity.modal.Patient;
 import com.app.repository.BloodDonorRepository;
 import com.app.repository.DoctorRepository;
 import com.app.repository.PatientRepository;
@@ -92,13 +91,14 @@ class DaoTest {
 	@Test
 	void saveDoctor() {
 		List<Doctor> doctors = Arrays.asList(
-				new Doctor("english", "Dentist", "MBBS", LocalDate.parse("2018-12-12"), "d2", "d2", "d2", "d2@gmail.com", "d2@123", LocalDate.parse("1996-12-12"), Gender.MALE, "123455", "Pimpri", "Pune", "MH",800), 
-				new Doctor("english", "Physician", "MBBS", LocalDate.parse("2018-12-12"), "d3", "d3", "d3", "d3@gmail.com", "d3@123", LocalDate.parse("1996-12-12"), Gender.MALE, "123455", "Pimpri", "Pune", "MH",500),
-				new Doctor("english", "Dentist", "MBBS", LocalDate.parse("2018-12-12"), "d4", "d4", "d4", "d4@gmail.com", "d4@123", LocalDate.parse("1996-12-12"), Gender.MALE, "123455", "Pimpri", "Mumbai", "MH",650),
-				new Doctor("english", "Covid", "MBBS", LocalDate.parse("2018-12-12"), "d5", "d5", "d5", "d5@gmail.com", "d5@123", LocalDate.parse("1996-12-12"), Gender.MALE, "123455", "Pimpri", "Pune", "MH",700));
-		
-		doctorRepo.saveAll(doctors);
-		assertTrue(true);
+//				new Doctor("english", "Dentist", "MBBS", LocalDate.parse("2018-12-12"), "d2", "d2", "d2", "d2@gmail.com", "d2@123", LocalDate.parse("1996-12-12"), Gender.MALE, "123455", "Pimpri", "Pune", "MH",800),
+//				new Doctor("english", "Physician", "MBBS", LocalDate.parse("2018-12-12"), "d3", "d3", "d3", "d3@gmail.com", "d3@123", LocalDate.parse("1996-12-12"), Gender.MALE, "123455", "Pimpri", "Pune", "MH",500),
+//				new Doctor("english", "Dentist", "MBBS", LocalDate.parse("2018-12-12"), "d4", "d4", "d4", "d4@gmail.com", "d4@123", LocalDate.parse("1996-12-12"), Gender.MALE, "123455", "Pimpri", "Mumbai", "MH",650),
+//				new Doctor("english", "Covid", "MBBS", LocalDate.parse("2018-12-12"), "d5", "d5", "d5", "d5@gmail.com", "d5@123", LocalDate.parse("1996-12-12"), Gender.MALE, "123455", "Pimpri", "Pune", "MH",700));
+//
+//		doctorRepo.saveAll(doctors);
+//		assertTrue(true);
+		);
 	}
 
 	@Test

@@ -8,7 +8,6 @@ import com.app.service.serviceInterface.PatientServiceIntf;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.app.entity.modal.Patient;
 import com.app.exception.customException.UserHandlingException;
 import com.app.repository.AppointmentRepository;
 import com.app.repository.PatientRepository;

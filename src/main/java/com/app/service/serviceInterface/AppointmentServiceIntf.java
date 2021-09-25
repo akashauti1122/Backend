@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import com.app.entity.modal.Appointment;
-import com.app.entity.modal.Patient;
 
 public interface AppointmentServiceIntf {
 	

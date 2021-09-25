@@ -6,8 +6,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.app.entity.dto.LoginResponse;
-import com.app.entity.modal.Admin;
-import com.app.entity.modal.Patient;
 import com.app.repository.AdminRepository;
 import com.app.repository.PatientRepository;
 

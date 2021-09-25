@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.app.entity.modal.BloodDonor;
 import com.app.entity.modal.Doctor;
-import com.app.entity.modal.Patient;
 import com.app.service.serviceInterface.BloodDonorIntf;
 import com.app.service.serviceInterface.DoctorServiceIntf;
 import com.app.service.serviceInterface.PatientServiceIntf;
